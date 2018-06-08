@@ -1,0 +1,62 @@
+package GLTesting.SQSTool;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    static byte[] HmacSHA256(String data, byte[] key) throws Exception {
+        String algorithm="HmacSHA256";
+        Mac mac = Mac.getInstance(algorithm);
+        mac.init(new SecretKeySpec(key, algorithm));
+        return mac.doFinal(data.getBytes("UTF8"));
+    }
+
+    static byte[] getSignatureKey(String key, String dateStamp, String regionName, String serviceName) throws Exception {
+        byte[] kSecret = ("AWS4" + key).getBytes("UTF8");
+        byte[] kDate = HmacSHA256(dateStamp, kSecret);
+        byte[] kRegion = HmacSHA256(regionName, kDate);
+        byte[] kService = HmacSHA256(serviceName, kRegion);
+        byte[] kSigning = HmacSHA256("aws4_request", kService);
+        return kSigning;
+    }
+public static void main( String[] args ) throws Exception {
+	
+	byte[] signature = getSignatureKey("pkgS8EOXw56BnJIV165QvKIobsLjXPaeYfkML70K", "20180604", "us-east-1", "sqs");
+	byteToString(signature);
+	//System.out.println();
+	//System.out.println(signature);
+	
+}
+public static String byteToString(byte[] test){
+		    String s = new String(test);
+		    System.out.println("Text Decryted : " + s);
+		    return s;
+}
+
+
+public static AmazonS3 credentialProvider() {
+	AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withCredentials(new ProfileCredentialsProvider()).build();
+	return s3Client;
+}
+
+public static void sendMessage(String queueUrl) {
+	SendMessageRequest send_msg_request = new SendMessageRequest()
+	        .withQueueUrl(queueUrl)
+	        .withMessageBody("hello world")
+	        .withDelaySeconds(5);
+	//sqs.sendMessage(send_msg_request);
+}
+}

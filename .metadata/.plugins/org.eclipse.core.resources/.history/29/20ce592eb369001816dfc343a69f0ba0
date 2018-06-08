@@ -1,0 +1,21 @@
+package GLTesting.SQSTool;
+
+import java.security.*;
+
+public class SignatureGenerator {
+	
+	String payLoad = WriteToSQS.getBody();
+	String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(payLoad); 
+	String CanonicalRequest =
+			  "POST" + '\n' +
+			  "/082894742960/danielzaccagniniGeneralLedgerQueue" + '\n' +
+			  "" + '\n' +
+			  "cache-control:" + '\n' +
+			  "content-length=406:" + '\n' +
+			  "content-type=application/json:" + '\n' +
+			  "host:sqs.us-east-1.amazonaws.com" + '\n' +
+			  "x-amz-date:"+WriteToSQS.timestamp1() + '\n' +
+			  "cache-control;content-length=406;content-type=application/json;host;x-amz-date" + '\n' +
+			  HexEncode(Hash(payLoad));
+
+}

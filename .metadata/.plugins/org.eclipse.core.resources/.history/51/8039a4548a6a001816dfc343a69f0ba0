@@ -1,0 +1,6 @@
+package GLTesting.SQSTool;
+import org.json;
+
+public class GiveMeJSON {
+
+}

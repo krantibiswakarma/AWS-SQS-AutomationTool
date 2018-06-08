@@ -1,0 +1,10 @@
+package GLTesting.SQSTool;
+
+import com.google.gson.Gson;
+
+public class GiveMeJSON {
+	
+	WriteToSQS writeToSQS = new WriteToSQS();
+	Gson gson = new Gson();
+	String json = gson.toJson(jsonElement)
+}

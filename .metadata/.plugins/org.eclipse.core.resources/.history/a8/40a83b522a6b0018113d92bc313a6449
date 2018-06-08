@@ -1,0 +1,11 @@
+package GLTesting.SQSTool;
+
+public class SQSStub {
+
+	public static void main(String[] args) {
+		SQSSimpleJavaClient client = new SQSSimpleJavaClient();
+		client.sendMessage();
+
+	}
+
+}

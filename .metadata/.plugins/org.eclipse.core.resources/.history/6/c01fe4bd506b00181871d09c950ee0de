@@ -1,0 +1,6 @@
+authCode = AKIAIIZGIT362OVDPJPQ
+secretCode = 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
+queueURL = https://sqs.us-east-1.amazonaws.com/082894742960/danielzaccagniniGeneralLedgerQueue
+body = {     "taskStatusId":"1",    "entryReason":"1",    "entryType":"incur",    "userType":"seller",    "dealerId":"123",    "dealerName":"Test Dealer 1",    "journalEntryDate":   "2018-02-22T02:06:58.147Z",    "breakdownParams":[        {      "itemType":"dealerFee",          "feeAmount":"100",          "taxAmount":"13"       }    ],    "metadataParams":[        {           "key":"",          "value":""       }    ] }
+region = us-east-1
+payloadFilePath = D:\\Automation\\SQS-AutomationForGL\\SQSTool\\SQSPayload.xlsx

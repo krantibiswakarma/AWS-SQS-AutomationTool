@@ -1,0 +1,6 @@
+package GLTesting.SQSTool;
+
+public class TestHelper throws Exception{
+	SignedRequestsHelper helper = new SignedRequestsHelper();
+
+}

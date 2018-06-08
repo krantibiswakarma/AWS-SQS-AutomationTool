@@ -1,0 +1,13 @@
+package GLTesting.SQSTool;
+
+public class SQSStub {
+	
+	static WriteToSQS read = new WriteToSQS();
+
+	public static void main(String[] args) {
+		SQSSimpleJavaClient client = new SQSSimpleJavaClient();
+		client.sendMessage(read.getPropertyFromFile("queueURL"));
+
+	}
+
+}

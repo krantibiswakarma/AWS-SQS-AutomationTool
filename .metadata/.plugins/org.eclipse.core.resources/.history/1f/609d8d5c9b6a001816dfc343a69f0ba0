@@ -1,0 +1,5 @@
+authCode = abcd
+endpoint = http://restapi.demoqa.com/utilities/weather/city/Toronto
+baseURI =https://sqs.us-east-1.amazonaws.com/
+body = {     "taskStatusId":"1",    "entryReason":"1",    "entryType":"incur",    "userType":"seller",    "dealerId":"123",    "dealerName":"Test Dealer 1",    "journalEntryDate":   "2018-02-22T02:06:58.147Z",    "breakdownParams":[        {      "itemType":"dealerFee",          "feeAmount":"100",          "taxAmount":"13"       }    ],    "metadataParams":[        {           "key":"",          "value":""       }    ] }
+pathParam = 082894742960/danielzaccagniniGeneralLedgerQueue

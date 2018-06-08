@@ -1,0 +1,44 @@
+package GLTesting.SQSTool;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import com.google.gson.Gson;
+
+public class GiveMeJSON {
+	
+	private static Properties prop;
+	private static String body;
+	private static String path = "D:\\Automation\\SQS-AutomationForGL\\SQSTool\\SQS.properties";
+	
+	
+
+	Gson gson = new Gson();
+	public String jsonPayLoad = gson.toJson(getBody());
+	//Object obj = gson.fromJson(json, classOfT)
+	
+	public static void readFile() {
+		
+		File file = new File(path);
+		FileInputStream fi;
+		try {
+			fi = new FileInputStream(file);
+			prop = new Properties();
+			prop.load(fi);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static String getBody() {
+		readFile();
+		body = prop.getProperty("body");
+		System.out.println(body);
+		return body;
+	}
+}

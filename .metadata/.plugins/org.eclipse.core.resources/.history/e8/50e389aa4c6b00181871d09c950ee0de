@@ -1,0 +1,26 @@
+package GLTesting.SQSTool;
+
+public class SQSStub {
+	
+	static SQSSimpleJavaClient client = new SQSSimpleJavaClient();
+	static CredentialProvider provider = new CredentialProvider();
+	static ExcelUtils excel = new ExcelUtils();
+
+	public static void main(String[] args) {
+		
+		
+		String message[] = excel.getAllCellData(provider.getPropertyFromFile("payloadFilePath"), "SQS", 1);
+		//System.out.println("message: "+message);
+		System.out.println("Test begins...");
+		System.out.println("message length: " + message.length);
+		for (int i=0;i<=message.length;i++) {
+			System.out.println("message is:"+message);
+		}
+		
+		//client.sendMessage(provider.getPropertyFromFile("queueURL"), message);
+
+	}
+	
+
+}
+

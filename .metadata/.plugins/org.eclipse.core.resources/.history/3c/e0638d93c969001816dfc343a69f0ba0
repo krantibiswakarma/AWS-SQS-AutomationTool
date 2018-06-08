@@ -1,0 +1,40 @@
+package GLTesting.SQSTool;
+
+import java.io.UnsupportedEncodingException;
+import java.security.*;
+
+import javax.crypto.Mac;
+
+import org.apache.commons.codec.binary.Base64;
+import hmac;
+
+public class SignatureGenerator {
+	private Mac mac = null;
+	
+	
+	public String sinKey() {
+				String kSecret = "pkgS8EOXw56BnJIV165QvKIobsLjXPaeYfkML70K";
+				String kDate = HMAC.hmacDigest("AWS4" + kSecret, SignedRequestsHelper.timestamp().toString(), "HmacSHA256");
+				String kRegion = HMAC.hmacDigest(kDate, "us-east-1");
+				String kService = HMAC.hmacDigest(kRegion, "sqs");
+				String kSigning = HMAC.hmacDigest(kService, "aws4_request");
+				return kSigning;
+	}
+	
+	String payLoad = "{     \"taskId\":\"1\",    \"triggerId\":\"1\",    \"taskType\":\"incur\",    \"userType\":\"seller\",    \"dealerId\":\"123\",    \"dealerName\":\"Test Dealer 1\",    \"journalDate\":   \"2018-02-22T02:06:58.147   Z\",    \"breakdownParams\":[        {      \"itemType\":\"dealerFee\",          \"feeAmount\":\"100\",          \"taxAmount\":\"13\"       }    ],    \"metadataParams\":[        {           \"key\":\"\",          \"value\":\"\"       }    ] }";
+	String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(payLoad);
+	String CanonicalRequest =""+"\n"+
+			  "POST" + '\n' +
+			  "/082894742960/danielzaccagniniGeneralLedgerQueue" + '\n' +
+			  "" + '\n' +
+			  "cache-control:" + '\n' +
+			  "content-length=406:" + '\n' +
+			  "content-type=application/json:" + '\n' +
+			  "host:sqs.us-east-1.amazonaws.com" + '\n' +
+			  "x-amz-date:"+WriteToSQS.timestamp1() + '\n' +
+			  '\n'+
+			  "cache-control;content-length=406;content-type=application/json;host;x-amz-date" + '\n' +
+			  sha256hex;
+
+}
+

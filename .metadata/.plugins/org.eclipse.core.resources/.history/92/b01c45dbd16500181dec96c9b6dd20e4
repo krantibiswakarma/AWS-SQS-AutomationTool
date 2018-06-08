@@ -1,0 +1,5 @@
+authCode = abcd
+endpoint = http://restapi.demoqa.com/utilities/weather/city/Toronto
+baseURI = http://restapi.demoqa.com/utilities/weather/city
+
+			

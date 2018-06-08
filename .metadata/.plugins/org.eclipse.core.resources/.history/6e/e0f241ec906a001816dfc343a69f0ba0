@@ -1,0 +1,19 @@
+package GLTesting.SQSTool;
+
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+
+public class CredentialProvider {
+
+	public static void main(String[] args) {
+		Basic
+		BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIIZGIT362OVDPJPQ", "pkgS8EOXw56BnJIV165QvKIobsLjXPaeYfkML70K");
+		AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion("us-east-1")
+		                        .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+		                        .build();
+
+	}
+
+}

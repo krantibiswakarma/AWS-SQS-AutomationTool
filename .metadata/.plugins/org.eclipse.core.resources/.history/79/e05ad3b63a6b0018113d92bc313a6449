@@ -1,0 +1,17 @@
+package GLTesting.SQSTool;
+
+public class SQSStub {
+	
+	static SQSSimpleJavaClient client = new SQSSimpleJavaClient();
+	static CredentialProvider provider = new CredentialProvider();
+
+	public static void main(String[] args) {
+		
+		System.out.println("Test begins...");
+		client.sendMessage(provider.getPropertyFromFile("queueURL"));
+
+	}
+	
+
+}
+

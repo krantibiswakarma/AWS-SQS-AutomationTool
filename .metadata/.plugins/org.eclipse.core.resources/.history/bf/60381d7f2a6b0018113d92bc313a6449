@@ -1,0 +1,13 @@
+package GLTesting.SQSTool;
+
+public class SQSStub {
+	
+	private static String path = "D:\\Automation\\SQS-AutomationForGL\\SQSTool\\SQS.properties";
+
+	public static void main(String[] args) {
+		SQSSimpleJavaClient client = new SQSSimpleJavaClient();
+		client.sendMessage();
+
+	}
+
+}

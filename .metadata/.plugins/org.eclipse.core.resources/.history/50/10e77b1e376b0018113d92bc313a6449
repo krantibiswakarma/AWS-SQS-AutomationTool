@@ -1,0 +1,23 @@
+package GLTesting.SQSTool;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+
+public class SQSStub {
+	
+	private static Properties prop;
+	private static String path = "D:\\Automation\\SQS-AutomationForGL\\SQSTool\\SQS.properties";
+	static SQSSimpleJavaClient client = new SQSSimpleJavaClient();
+	CredentialProvider provider = new CredentialProvider();
+
+	public static void main(String[] args) {
+		
+		System.out.println("test begins...");
+		client.sendMessage(provider.getPropertyFromFile("queueURL"));
+
+	}
+	
+
+}
+

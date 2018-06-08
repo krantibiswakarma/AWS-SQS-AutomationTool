@@ -1,0 +1,40 @@
+package GLTesting.SQSTool;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+
+public class SQSStub {
+	
+	private static Properties prop;
+	private static String path = "D:\\Automation\\SQS-AutomationForGL\\SQSTool\\SQS.properties";
+	static SQSSimpleJavaClient client = new SQSSimpleJavaClient();
+
+	public static void main(String[] args) {
+		
+		System.out.println("test begins...");
+		client.sendMessage(getPropertyFromFile("queueURL"));
+
+	}
+	
+	public static void readFile() {
+		
+		File file = new File(path);
+		FileInputStream fi;
+		try {
+			fi = new FileInputStream(file);
+			prop = new Properties();
+			prop.load(fi);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public static  String getPropertyFromFile(String value) {
+		readFile();
+		String valueFromFile = prop.getProperty(value);
+		return valueFromFile;
+	}
+
+}
+

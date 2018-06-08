@@ -1,0 +1,36 @@
+package GLTesting.SQSTool;
+
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+
+public class WriteToSQS {
+
+	private static Properties prop;
+	private static String path = "D:\\Automation\\SQS-AutomationForGL\\SQSTool\\SQS.properties";
+
+	
+	public void readFile() {
+		
+		File file = new File(path);
+		FileInputStream fi;
+		try {
+			fi = new FileInputStream(file);
+			prop = new Properties();
+			prop.load(fi);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	public String getPropertyFromFile(String value) {
+		readFile();
+		String valueFromFile = prop.getProperty(value);
+		System.out.println(valueFromFile);
+		return valueFromFile;
+	}
+
+}

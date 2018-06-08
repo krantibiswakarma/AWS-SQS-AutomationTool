@@ -1,0 +1,13 @@
+package GLTesting.SQSTool;
+
+public class TestHelper extends SignedRequestsHelper{
+	public TestHelper() throws Exception {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public static void main(String[] args){
+		
+	}
+
+}

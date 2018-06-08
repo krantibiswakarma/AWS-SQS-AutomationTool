@@ -1,0 +1,84 @@
+package GLTesting.SQSTool;
+
+import com.amazonaws.handlers.AsyncHandler;
+import com.amazonaws.services.sqs.AmazonSQSAsync;
+import com.amazonaws.services.sqs.model.MessageAttributeValue;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.amazonaws.services.sqs.model.SendMessageResult;
+import com.google.gson.Gson;
+import grails.util.Environment;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * Helper service to queue messages (SQS).
+ */
+public class SQSHelperService {
+
+    private Map<String, String> queueUrls = new ConcurrentHashMap<>()
+    AmazonSQSAsync amazonSqs
+
+    void send(String queueName, payload, Map<String, Object> requestParameters = [:]) {
+
+        if (queueName == null || queueName.trim().length() == 0) return
+
+        String queueUrl = queueUrls.computeIfAbsent(queueName, { String q -> Environment.isDevelopmentMode() ? amazonSqs.createQueue(q).queueUrl : amazonSqs.getQueueUrl(q).queueUrl })
+
+        def attributes = new HashMap<String, MessageAttributeValue>()
+
+        if (requestParameters.headers) {
+            requestParameters.headers.each { String name, value ->
+                attributes.put(name, newMessageAttributeValue(value))
+            }
+        }
+
+        attributes.contentType = newMessageAttributeValue("application/json")
+        def json = new Gson().toJson(payload)
+
+        def request = new SendMessageRequest()
+                .withQueueUrl(queueUrl)
+                .withMessageBody(json)
+                .withMessageAttributes(attributes)
+
+        if (requestParameters.messageGroupId) {
+            request.setMessageGroupId(requestParameters.messageGroupId as String)
+        } else if (queueUrl.endsWith(".fifo")) {
+            request.setMessageGroupId("default")
+        }
+
+        if (requestParameters.messageDeduplicationId) {
+            request.setMessageDeduplicationId(requestParameters.messageDeduplicationId as String)
+        }
+
+        if (requestParameters.delaySeconds) {
+            request.setDelaySeconds(requestParameters.delaySeconds as Integer)
+        }
+
+        if (requestParameters.async) {
+            amazonSqs.sendMessageAsync(request, new LoggingAsyncHandler())
+        } else {
+            amazonSqs.sendMessage(request)
+        }
+    }
+
+    private static MessageAttributeValue newMessageAttributeValue(value) {
+        return new MessageAttributeValue().withDataType("String").withStringValue(String.valueOf(value))
+    }
+
+    private class LoggingAsyncHandler implements AsyncHandler<SendMessageRequest, SendMessageResult> {
+
+        @Override
+        void onError(Exception exception) {
+            log.error("Async SQS send failed", exception)
+        }
+
+        @Override
+        void onSuccess(SendMessageRequest request, SendMessageResult sendMessageResult) {
+            if (log.isDebugEnabled()) {
+                //log.debug("Successfully sent async SQS message with id $sendMessageResult.messageId")
+            }
+        }
+    }
+
+}

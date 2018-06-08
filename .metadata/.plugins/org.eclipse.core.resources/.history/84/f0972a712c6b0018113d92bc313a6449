@@ -1,0 +1,14 @@
+package GLTesting.SQSTool;
+
+public class SQSStub {
+	 
+
+	public static void main(String[] args) {
+		SQSSimpleJavaClient client = new SQSSimpleJavaClient();
+		WriteToSQS read = new WriteToSQS();
+		System.out.println("test begins...");
+		client.sendMessage("https://sqs.us-east-1.amazonaws.com/082894742960/danielzaccagniniGeneralLedgerQueue");
+
+	}
+
+}

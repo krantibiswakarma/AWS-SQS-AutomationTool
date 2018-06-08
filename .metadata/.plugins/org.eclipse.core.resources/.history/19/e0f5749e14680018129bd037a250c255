@@ -1,0 +1,87 @@
+package GLTesting.SQSTool;
+
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.equalTo;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+import io.restassured.RestAssured;
+
+public class WriteToSQS {
+	
+	private String authCode;
+	private static String endpoint;
+	//private JSONPObject payload;
+	private static Properties prop;
+	private static String path = "D:\\Automation\\SQS-AutomationForGL\\SQSTool\\SQS.properties";
+	private static String baseURI;
+	private static String pathParam;
+	private static String body;
+	
+
+	public static void main(String[] args) throws IOException {
+		
+		getBaseURI();
+		getPathParam();
+		getBody();
+		System.out.println("Starting test...");
+		RestAssured.baseURI = baseURI;
+		
+		given().
+				auth().preemptive().
+				basic("nthgen.rtns.key.acces", "AKIAIIZGIT362OVDPJPQ").
+				auth().preemptive().
+				basic("nthgen.rtns.key.secret", "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").
+				//header("nthgen.rtns.key.acces", "AKIAIIZGIT362OVDPJPQ").
+				//header("nthgen.rtns.key.secret","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").
+				//contentType("application/json").
+				//param(pathParam).
+				body(body).
+		when().
+				post(pathParam).
+				prettyPeek().
+		then().
+				statusCode(201);
+				//body("name", equalTo("morpheus"));
+
+		System.out.println("End of test...");
+	}
+	
+	
+	public static void readFile() throws IOException{
+		File file = new File(path);
+		FileInputStream fi = new FileInputStream(file);
+		prop = new Properties();
+		prop.load(fi);
+	}
+	
+	public void getAuthCode() throws IOException {
+		readFile();
+		authCode = prop.getProperty("authCode");
+		System.out.println(authCode);		
+	}
+	public static void getEndpoint() throws IOException {
+		readFile();
+		endpoint = prop.getProperty("endpoint");
+		System.out.println(endpoint);	
+	}
+	public static void getBaseURI() throws IOException {
+		readFile();
+		baseURI = prop.getProperty("baseURI");
+		System.out.println(baseURI);
+	}
+	public static void getPathParam() throws IOException {
+		readFile();
+		pathParam = prop.getProperty("pathParam");
+		System.out.println(pathParam);
+	}
+	public static void getBody() throws IOException {
+		readFile();
+		body = prop.getProperty("body");
+		System.out.println(body);
+	}
+
+}

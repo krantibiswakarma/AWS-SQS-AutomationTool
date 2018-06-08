@@ -1,0 +1,45 @@
+package GLTesting.SQSTool;
+
+import javax.crypto.Mac;
+import com.amazonaws.util.*;
+
+public class SignatureGenerator {
+	private Mac mac = null;
+	
+	
+	public static String sinKey() {
+				String kSecret = "pkgS8EOXw56BnJIV165QvKIobsLjXPaeYfkML70K";
+				String kDate = HMAC.hmacDigest("AWS4" + kSecret, SignedRequestsHelper.timestamp(), "HmacSHA256");
+				String kRegion = HMAC.hmacDigest(kDate, "us-east-1", "HmacSHA256");
+				String kService = HMAC.hmacDigest(kRegion, "sqs", "HmacSHA256");
+				String kSigning = HMAC.hmacDigest(kService, "aws4_request", "HmacSHA256");
+				System.out.println("KSigningKey is:"+kSigning);
+				return kSigning;
+						
+	}
+	
+	public String StringToSign =
+		    "AWS4-HMAC-SHA256" + "\n" +
+		    WriteToSQS.timestamp1() + "\n" +
+		    SignedRequestsHelper.timestamp()+"/"+"us-east-1"+"sqs"+"aws4-request" + "\n" +
+		    org.apache.commons.codec.digest.DigestUtils.sha256Hex(sinKey());
+	
+	
+	
+	String payLoad = "{     \"taskId\":\"1\",    \"triggerId\":\"1\",    \"taskType\":\"incur\",    \"userType\":\"seller\",    \"dealerId\":\"123\",    \"dealerName\":\"Test Dealer 1\",    \"journalDate\":   \"2018-02-22T02:06:58.147   Z\",    \"breakdownParams\":[        {      \"itemType\":\"dealerFee\",          \"feeAmount\":\"100\",          \"taxAmount\":\"13\"       }    ],    \"metadataParams\":[        {           \"key\":\"\",          \"value\":\"\"       }    ] }";
+	String sha256hex =Base16Lower(org.apache.commons.codec.digest.DigestUtils.sha256Hex(payLoad));
+	String CanonicalRequest =
+			  "POST" + '\n' +
+			  "/082894742960/danielzaccagniniGeneralLedgerQueue" + '\n' +
+			  ""+ '\n' +
+			  "cache-control:" + '\n' +
+			  "content-length=406:" + '\n' +
+			  "content-type=application/json:" + '\n' +
+			  "host:sqs.us-east-1.amazonaws.com" + '\n' +
+			  "x-amz-date:"+WriteToSQS.timestamp1() + '\n' +
+			  '\n'+
+			  "cache-control;content-length=406;content-type=application/json;host;x-amz-date" + '\n' +
+			  sha256hex;
+
+}
+

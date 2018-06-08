@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="io.restassured.internal.path.json.mapping.JsonObjectDeserializer"/>
+<fullyQualifiedTypeName name="com.fasterxml.jackson.databind.util.JSONPObject"/>
+<fullyQualifiedTypeName name="java.util.Properties"/>
+<fullyQualifiedTypeName name="org.codehaus.groovy.transform.FieldASTTransformation"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="java.io.FileInputStream"/>
+<fullyQualifiedTypeName name="io.restassured.RestAssured"/>
+</qualifiedTypeNameHistroy>

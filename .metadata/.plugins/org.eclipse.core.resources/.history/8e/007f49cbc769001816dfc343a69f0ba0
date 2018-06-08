@@ -1,0 +1,55 @@
+package GLTesting.SQSTool;
+
+import java.io.UnsupportedEncodingException;
+import java.security.*;
+
+import javax.crypto.Mac;
+
+import org.apache.commons.codec.binary.Base64;
+import hmac;
+
+public class SignatureGenerator {
+	private Mac mac = null;
+	
+	
+	public String sinKey() {
+				String kSecret = "pkgS8EOXw56BnJIV165QvKIobsLjXPaeYfkML70K";
+				String kDate = hmac("AWS4" + kSecret, SignedRequestsHelper.timestamp());
+				kRegion = hmac(kDate, Region);
+				kService = hmac(kRegion, Service);
+				kSigning = hmac(kService, "aws4_request");
+				return "";
+	}
+	
+	public String hmac(String stringToSign) {
+		String signature = null;
+		byte[] data;
+		byte[] rawHmac;
+		try {
+			data = stringToSign.getBytes("UTF-8");
+			rawHmac = mac.doFinal(data);
+			Base64 encoder = new Base64();
+			signature = new String(encoder.encode(rawHmac));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("UTF-8" + " is unsupported!", e);
+		}
+		return signature;
+	}
+	
+	String payLoad = "{     \"taskId\":\"1\",    \"triggerId\":\"1\",    \"taskType\":\"incur\",    \"userType\":\"seller\",    \"dealerId\":\"123\",    \"dealerName\":\"Test Dealer 1\",    \"journalDate\":   \"2018-02-22T02:06:58.147   Z\",    \"breakdownParams\":[        {      \"itemType\":\"dealerFee\",          \"feeAmount\":\"100\",          \"taxAmount\":\"13\"       }    ],    \"metadataParams\":[        {           \"key\":\"\",          \"value\":\"\"       }    ] }";
+	String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(payLoad);
+	String CanonicalRequest =""+"\n"+
+			  "POST" + '\n' +
+			  "/082894742960/danielzaccagniniGeneralLedgerQueue" + '\n' +
+			  "" + '\n' +
+			  "cache-control:" + '\n' +
+			  "content-length=406:" + '\n' +
+			  "content-type=application/json:" + '\n' +
+			  "host:sqs.us-east-1.amazonaws.com" + '\n' +
+			  "x-amz-date:"+WriteToSQS.timestamp1() + '\n' +
+			  '\n'+
+			  "cache-control;content-length=406;content-type=application/json;host;x-amz-date" + '\n' +
+			  sha256hex;
+
+}
+

@@ -1,0 +1,14 @@
+package GLTesting.SQSTool;
+
+public class SignatureGenerator {
+	
+	
+	String CanonicalRequest =
+			  "POST" + '\n' +
+			  "/082894742960/danielzaccagniniGeneralLedgerQueue" + '\n' +
+			  CanonicalQueryString + '\n' +
+			  CanonicalHeaders + '\n' +
+			  SignedHeaders + '\n' +
+			  HexEncode(Hash(RequestPayload))
+
+}

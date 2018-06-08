@@ -1,0 +1,73 @@
+package GLTesting.SQSTool;
+
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.equalTo;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+import io.restassured.RestAssured;
+
+public class WriteToSQS {
+	
+	private String authCode;
+	private static String endpoint;
+	//private JSONPObject payload;
+	private static Properties prop;
+	private static String path = "D:\\Automation\\SQS-AutomationForGL\\SQSTool\\endpoints.properties";
+	private static String baseURI;
+	private static String pathParam;
+	
+
+	public static void main(String[] args) throws IOException {
+		
+		getBaseURI();
+		getPathParma();
+		System.out.println("Starting test...");
+		RestAssured.baseURI = baseURI;
+		
+		given().
+				param(pathParam).
+				body("").
+		when().
+				get().
+				prettyPeek().
+		then().
+				statusCode(200).
+				body("City", equalTo("Toronto"));
+
+		System.out.println("End of test...");
+	}
+	
+	
+	public static void readFile() throws IOException{
+		File file = new File(path);
+		FileInputStream fi = new FileInputStream(file);
+		prop = new Properties();
+		prop.load(fi);
+	}
+	
+	public void getAuthCode() throws IOException {
+		readFile();
+		authCode = prop.getProperty("authCode");
+		System.out.println(authCode);		
+	}
+	public static void getEndpoint() throws IOException {
+		readFile();
+		endpoint = prop.getProperty("endpoint");
+		System.out.println(endpoint);	
+	}
+	public static void getBaseURI() throws IOException {
+		readFile();
+		baseURI = prop.getProperty("baseURI");
+		System.out.println(baseURI);
+	}
+	public static void getPathParma() throws IOException {
+		readFile();
+		pathParam = prop.getProperty("pathParam");
+		System.out.println(pathParam);
+	}
+
+}

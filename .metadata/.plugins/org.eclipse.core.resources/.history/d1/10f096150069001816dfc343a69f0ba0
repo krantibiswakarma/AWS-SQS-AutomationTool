@@ -1,0 +1,122 @@
+package GLTesting.SQSTool;
+
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.equalTo;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.Properties;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+
+import io.restassured.RestAssured;
+
+public class WriteToSQS {
+
+
+	private String authCode;
+	private static String endpoint;
+	// private JSONPObject payload;
+	private static Properties prop;
+	private static String path = "D:\\Automation\\SQS-AutomationForGL\\SQSTool\\SQS.properties";
+	private static String baseURI;
+	private static String pathParam;
+	private static String body;
+	private static byte[] signature;
+	private static AmazonS3 s3Client;
+	
+
+
+	public static void main(String[] args) throws Exception {
+		
+		//sendMessage1();
+
+		getBaseURI();
+		getPathParam();
+		getBody();
+		s3Client = App.credentialProvider();
+		System.out.println("Starting test...");
+		RestAssured.baseURI = baseURI;
+		signature = App.getSignatureKey("pkgS8EOXw56BnJIV165QvKIobsLjXPaeYfkML70K", "20180604", "us-east-1", "sqs");
+		System.out.println("signature : "+signature);
+
+		given().contentType("application/json").auth().basic("AWSAccessKeyId", "AKIAIIZGIT362OVDPJPQ")
+				.header("X-Amz-Expires", "604800").header("X-amz-date", "20180604T221248Z")
+				.header("Host", "sqs.us-east-1.amazonaws.com").header("Authorization", "AWS4-HMAC-SHA256 Credential=AKIAIIZGIT362OVDPJPQ/20180604/us-east-1/sqs/aws4_request, SignedHeaders=content-length;content-type;host;x-amz-date, Signature=6c007a668f98777f9e187998175823c202ce2bcd2260e6983200d6fe185a1675")
+				.urlEncodingEnabled(DEFAULT_URL_ENCODING_ENABLED).body(body).when().post(pathParam).prettyPeek().then()
+				.statusCode(200);
+		long awsTime = new Date().getTime();
+		//given().headers("Authorization", signature, "x-amz-date", "20180604T221248Z", "ContentType", "").when().post(pathParam).prettyPeek().then().statusCode(200);
+		
+
+		System.out.println("End of test...");
+	}
+
+	public static void readFile() throws IOException {
+		File file = new File(path);
+		FileInputStream fi = new FileInputStream(file);
+		prop = new Properties();
+		prop.load(fi);
+	}
+
+	public void getAuthCode() throws IOException {
+		readFile();
+		authCode = prop.getProperty("authCode");
+		System.out.println(authCode);
+	}
+
+	public static void getEndpoint() throws IOException {
+		readFile();
+		endpoint = prop.getProperty("endpoint");
+		System.out.println(endpoint);
+	}
+
+	public static void getBaseURI() throws IOException {
+		readFile();
+		baseURI = prop.getProperty("baseURI");
+		System.out.println(baseURI);
+	}
+
+	public static void getPathParam() throws IOException {
+		readFile();
+		pathParam = prop.getProperty("pathParam");
+		System.out.println(pathParam);
+	}
+
+	public static void getBody() throws IOException {
+		readFile();
+		body = prop.getProperty("body");
+		System.out.println(body);
+	}
+
+	public static void sendMessage1() throws IOException {
+		getBody();
+		String QUEUE_NAME = "https://sqs.us-east-1.amazonaws.com/082894742960/danielzaccagniniGeneralLedgerQueue"
+				+ new Date().getTime();
+		final AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
+		String queueUrl = sqs.getQueueUrl(QUEUE_NAME).getQueueUrl();
+
+		SendMessageRequest send_msg_request = new SendMessageRequest().withQueueUrl(queueUrl)
+				.withMessageBody("hello world").withDelaySeconds(5);
+		sqs.sendMessage(send_msg_request);
+	}
+	
+	public static String test() {
+		String url = "https://sqs.us-east-1.amazonaws.com/";
+		String request = "";
+		request = request+"Acknowledged";
+		
+		
+		return "";
+	}
+	
+
+}
